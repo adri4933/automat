@@ -1,2 +1,5 @@
-# automat
-R package that gather several basic R functions to make more complete outputs for faster analysis
+## R/automat
+
+---
+R/automat is an [R](https://www.r-project.org) package with R functions that are useful to me for faster basics statistic analysis.
+---
