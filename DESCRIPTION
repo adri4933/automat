@@ -1,0 +1,12 @@
+Package: automat
+Title: Allow user to get quick data description or analysis
+Version: 0.0.0.9000
+Authors@R: 
+    person("Adrien", "Peltier", , "adrienpeltier@outlook.com", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Automatise mes analyses statistiques.
+License: GPL-3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: dplyr, purrr, psych, rstatix, stats
