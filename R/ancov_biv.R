@@ -65,7 +65,7 @@ ancov_biv <- function(model, showShapiro=T, showVarianceTest=T) {
   }
 
   return(Filter(Negate(is.null), list(shapiro_pvalue=shapiro_pval,
-                                      varTest_pvalue=paste(test_function, ":", varTest$p),
+                                      varTest_pvalue=paste(test_function, ":", round(varTest$p, 4)),
                                       model=result)))
 }
 
