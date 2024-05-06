@@ -14,7 +14,7 @@ descri(vecteurj0, vecteurj90, groupe)
 \item{groupe}{a group variable}
 }
 \value{
-return a vector of strings values, corresponding to N, mean, sd, se rounded up to 2 decimals
+return a list : numeric description, test for difference between both groups, at t0 and paired by group
 }
 \description{
 describe

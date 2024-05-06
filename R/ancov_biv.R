@@ -1,8 +1,8 @@
 #' regression with 2 independant variables
 #'
 #' @param model a model object
-#' @param showShapiro if True, Shapiro test is realised on residuals to test for normality
-#' @param showBartlett if True, Bartlett test is realised on residuals to test for equality of variance
+#' @param showShapiro if True, Shapiro test is realized on residuals to test for normality
+#' @param showVarianceTest if True, Levene's or Bartlett's test is realized on residuals to test for equality of variance
 #'
 #'
 #' @return function returns a list of 3 object : "model" containing model summary, "shapiro pvalue" and "bartlett pvalue"
@@ -12,7 +12,7 @@
 #'
 #' @examples
 
-ancov_biv <- function(model, showShapiro=T, showBartlett=T) {
+ancov_biv <- function(model, showShapiro=T, showVarianceTest=T) {
 
   if(!inherits(model, "lm")){
     stop("'model' argument has to be a lm object")
@@ -27,27 +27,30 @@ ancov_biv <- function(model, showShapiro=T, showBartlett=T) {
   }
 
 
-  if(showBartlett){
+  if(showVarianceTest){
+
+    test_function <- ifelse(shapiro_pval<0.05, "levene_test", "bartlett.test")
+
 
     if(length(model$terms[[3]]) < 2){
-      bartlett_pval <- tryCatch(
-        bartlett.test(as.formula(
+      varTest_pval <- tryCatch(
+        do.call(test_function, list(as.formula(
           paste(deparse(model$terms[[2]]), "~", as.character(model$terms[[3]]))
-        ), data=get(model$call$data)),
+        ), data=get(model$call$data))),
         error=function(e){
           return("Independant variable is not a factor")
         }
       )
     }else{
-      bartlett_pval <- tryCatch(
-        bartlett.test(as.formula(
+      varTest_pval <- tryCatch(
+        do.call(test_function, list(as.formula(
           paste(deparse(model$terms[[2]]), "~", as.character(model$terms[[3]])[2])
-        ), data=get(model$call$data)),
+        ), data=get(model$call$data))),
         error=function(e){
           tryCatch(
-            bartlett.test(as.formula(
+            do.call(test_function, list(as.formula(
               paste(deparse(model$terms[[2]]), "~", as.character(model$terms[[3]])[3])
-            ), data=get(model$call$data)),
+            ), data=get(model$call$data))),
             error=function(e2){
               return("No factor variable among independant variables")
             }
@@ -58,9 +61,11 @@ ancov_biv <- function(model, showShapiro=T, showBartlett=T) {
 
 
   }else{
-    bartlett_pval <- NULL
+    varTest_pval <- NULL
   }
 
-  return(Filter(Negate(is.null), list(shapiro_pvalue=shapiro_pval, bartlett_pvalue=bartlett_pval, model=result)))
+  return(Filter(Negate(is.null), list(shapiro_pvalue=shapiro_pval,
+                                      varTest_pvalue=paste(test_function, ":", varTest_pval),
+                                      model=result)))
 }
 
