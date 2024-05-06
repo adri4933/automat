@@ -33,7 +33,7 @@ ancov_biv <- function(model, showShapiro=T, showVarianceTest=T) {
 
 
     if(length(model$terms[[3]]) < 2){
-      varTest_pval <- tryCatch(
+      varTest <- tryCatch(
         do.call(test_function, list(as.formula(
           paste(deparse(model$terms[[2]]), "~", as.character(model$terms[[3]]))
         ), data=get(model$call$data))),
@@ -42,7 +42,7 @@ ancov_biv <- function(model, showShapiro=T, showVarianceTest=T) {
         }
       )
     }else{
-      varTest_pval <- tryCatch(
+      varTest <- tryCatch(
         do.call(test_function, list(as.formula(
           paste(deparse(model$terms[[2]]), "~", as.character(model$terms[[3]])[2])
         ), data=get(model$call$data))),
@@ -61,11 +61,11 @@ ancov_biv <- function(model, showShapiro=T, showVarianceTest=T) {
 
 
   }else{
-    varTest_pval <- NULL
+    varTest <- NULL
   }
 
   return(Filter(Negate(is.null), list(shapiro_pvalue=shapiro_pval,
-                                      varTest_pvalue=paste(test_function, ":", varTest_pval),
+                                      varTest_pvalue=paste(test_function, ":", varTest_pval$p),
                                       model=result)))
 }
 
