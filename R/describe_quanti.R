@@ -63,5 +63,5 @@ describe_quanti <- function(data, createCSV=F) {
     print("CSV file has been created.")
   }
 
-  print(data_descri)
+  return(data_descri)
 }
